@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Cardgame</title>
     <style>
         * {
             margin: 0;
@@ -124,22 +124,28 @@
 
         /* CSS for number buttons */
         #randomButtons {
-    display: flex; /* ให้เป็น Flex Container */
-    flex-wrap: wrap; /* ให้ Flex Item ขึ้นบรรทัดใหม่เมื่อขนาดเกินขอบเขต */
-    justify-content: center; /* จัดจุดตัดศูนย์กลางของ Flex Container */
-    align-items: center; /* จัดให้ Flex Item อยู่ตรงกลางในแนวตั้ง */
-    height: 100%; /* กำหนดความสูงของ Flex Container */
-}
+            display: flex;
+            /* ให้เป็น Flex Container */
+            flex-wrap: wrap;
+            /* ให้ Flex Item ขึ้นบรรทัดใหม่เมื่อขนาดเกินขอบเขต */
+            justify-content: center;
+            /* จัดจุดตัดศูนย์กลางของ Flex Container */
+            align-items: center;
+            /* จัดให้ Flex Item อยู่ตรงกลางในแนวตั้ง */
+            height: 100%;
+            /* กำหนดความสูงของ Flex Container */
+        }
 
-.btn-number {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 25px;
-    margin: 5px; /* เพิ่มระยะห่างระหว่างปุ่ม */
-    background-color: #e2bd29;
-    color: #fff;
-}
+        .btn-number {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            margin: 5px;
+            /* เพิ่มระยะห่างระหว่างปุ่ม */
+            background-color: #e2bd29;
+            color: #fff;
+        }
 
 
 
@@ -212,7 +218,7 @@
         </div>
         <div class="sendmsg">
             <!-- เพิ่มปุ่มสำหรับสร้างเลขสุ่ม -->
-            <button id="btnGenerate" class="btn-primary">สร้างเลขสุ่ม</button>
+            <button id="btnGenerate" class="btn-primary">สุ่มตัวเลข</button>
             <!-- เพิ่มตำแหน่งสำหรับปุ่มสุ่มเลข  -->
             <div id="randomButtons">
 
@@ -251,43 +257,44 @@
         const loginButton = document.getElementById('loginBtn');
         const chatContainer = document.getElementById('card');
 
-     
+
 
         // Function to handle login
-function handleLogin() {
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
+        function handleLogin() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
 
-    if (username !== '' && password !== '') {
-        // Save the username to localStorage
-        localStorage.setItem('username', username);
+            if (username !== '' && password !== '') {
+                // Save the username to localStorage
+                localStorage.setItem('username', username);
 
-        chatContainer.style.display = 'block';
-        loginForm.style.display = 'none';
+                chatContainer.style.display = 'block';
+                loginForm.style.display = 'none';
 
-        // Listen for Enter key press in the message input field
-        txtMsg.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // Function to send message
-        function sendMessage() {
-            const txtMsg = document.querySelector('#txtMsg');
-            const user = localStorage.getItem('username'); // Get the username from localStorage
-            if (txtMsg.value.trim() !== '') {
-                set(push(ref(db, 'gamecard')), {
-                    username: user,
-                    msg: txtMsg.value
+                // Listen for Enter key press in the message input field
+                txtMsg.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
                 });
-                txtMsg.value = ''; // Clear message input field after sending
+
+                // Function to send message
+                function sendMessage() {
+                    const user = localStorage.getItem('username'); // Get the username from localStorage
+                    if (txtMsg.value.trim() !== '') {
+                        set(push(ref(db, 'gamecard')), {
+                            username: user,
+                            msg: txtMsg.value
+                        });
+                        txtMsg.value = ''; // Clear message input field after sending
+                    }
+                }
+
+            } else {
+                alert('โปรดใส่รหัสผ่าน ');
             }
+
         }
-    } else {
-        alert('โปรดใส่รหัสผ่าน ');
-    }
-}
 
         // Event listener for login button
         loginButton.addEventListener('click', handleLogin);
@@ -434,48 +441,49 @@ function handleLogin() {
 
 
         function sendMessage(msg) {
-    const user = localStorage.getItem('username'); // Get the username from localStorage
-    if (msg.trim() !== '') {
-        set(push(ref(db, 'gamecard')), {
-            username: user,
-            msg: msg
+            const user = localStorage.getItem('username'); // Get the username from localStorage
+            if (msg.trim() !== '') {
+                set(push(ref(db, 'gamecard')), {
+                    username: user,
+                    msg: msg
+                });
+            }
+        }
+
+        // Event listener for the new game button
+        const btnNewGame = document.getElementById('btnNewGame');
+        btnNewGame.addEventListener('click', () => {
+            // Clear all data in the gamecard
+            const gamecardRef = ref(db, 'gamecard');
+            set(gamecardRef, null);
+
+            // Reset the state of the random number button
+            btnGenerate.disabled = false;
+            btnGenerate.style.backgroundColor = '#0084FF';
+
+
         });
-    }
-}
+        function resetButtonState() {
+            // Reset the state of the random number button
+            const btnGenerate = document.getElementById('btnGenerate');
+            btnGenerate.disabled = false;
+            btnGenerate.style.backgroundColor = '#0084FF';
+        }
 
-// Event listener for the new game button
-const btnNewGame = document.getElementById('btnNewGame');
-btnNewGame.addEventListener('click', () => {
-    // Clear all data in the gamecard
-    const gamecardRef = ref(db, 'gamecard');
-    set(gamecardRef, null);
+        // Call the resetButtonState function when starting a new game
+        btnNewGame.addEventListener('click', () => {
+            // Clear all data in the gamecard
+            const gamecardRef = ref(db, 'gamecard');
+            set(gamecardRef, null);
 
-    // Reset the state of the random number button
-    btnGenerate.disabled = false;
-    btnGenerate.style.backgroundColor = '#0084FF';
+            // Reset the button state
+            resetButtonState();
 
-   
-});
-function resetButtonState() {
-    // Reset the state of the random number button
-    const btnGenerate = document.getElementById('btnGenerate');
-    btnGenerate.disabled = false;
-    btnGenerate.style.backgroundColor = '#0084FF';
-}
 
-// Call the resetButtonState function when starting a new game
-btnNewGame.addEventListener('click', () => {
-    // Clear all data in the gamecard
-    const gamecardRef = ref(db, 'gamecard');
-    set(gamecardRef, null);
-
-    // Reset the button state
-    resetButtonState();
-
-    
-});
+        });
 
     </script>
 
 </body>
+
 </html>
