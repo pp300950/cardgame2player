@@ -232,7 +232,7 @@
         </div>
         <div class="sendmsg">
             <!-- เพิ่มปุ่มสำหรับสร้างเลขสุ่ม -->
-            <button id="btnGenerate" class="btn-primary">สุ่มตัวเลข</button>
+           <!-- --> <button id="btnGenerate" class="btn-primary">สุ่มตัวเลข</button>
             <!-- เพิ่มตำแหน่งสำหรับปุ่มสุ่มเลข  -->
             <div id="randomButtons">
 
@@ -289,10 +289,10 @@
 
 
                 // Listen for Enter key press in the message input field
-                 // Event listener for sending messages when button is clicked
-        btnSend.addEventListener('click', () => {
-            sendMessage();
-        });
+                // Event listener for sending messages when button is clicked
+                btnSend.addEventListener('click', () => {
+                    sendMessage();
+                });
                 txtMsg.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         sendMessage();
@@ -461,15 +461,15 @@
         }
 
         function sendMessage(msg) {
-                    const user = localStorage.getItem('username'); // Get the username from localStorage
-                    if (msg.trim() !== '') {
-                        set(push(ref(db, 'gamecard')), {
-                            username: user,
-                            msg: msg
-                        });
-                        txtMsg.value = ''; // Clear message input field after sending
-                    }
-                }
+            const user = localStorage.getItem('username'); // Get the username from localStorage
+            if (msg.trim() !== '') {
+                set(push(ref(db, 'gamecard')), {
+                    username: user,
+                    msg: msg
+                });
+                txtMsg.value = ''; // Clear message input field after sending
+            }
+        }
 
 
         // Event listener for the new game button
@@ -483,26 +483,48 @@
             btnGenerate.disabled = false;
             btnGenerate.style.backgroundColor = '#0084FF';
 
+            document.getElementById('randomButtons').innerHTML = '';
 
+            // Generate 7 random buttons
+            for (let i = 0; i < 7; i++) {
+                // Create a button element
+                const button = document.createElement('button');
+                button.textContent = Math.floor(Math.random() * 4) + 1; // Generate random number between 1 and 4
+                button.classList.add('btn', 'btn-number'); // Add button styling and custom class for number buttons
+                button.addEventListener('click', () => {
+                        // Remove the button when clicked
+                        button.remove();
+                        // Send the number associated with the button to the chat
+                        sendMessage(button.textContent);
+                        if (totalPoints === 21) {
+                            set(push(ref(db, 'gamecard')), {
+                                username: 'ระบบ',
+                                msg: `<span class="system-message">ชนะ! คะแนนรวมเท่ากับ 21</span>`
+                            });
+                        } else if (totalPoints > 21) {
+                            // Send losing message if totalPoints is greater than 21
+                            set(push(ref(db, 'gamecard')), {
+                                username: 'ระบบ',
+                                msg: `<span class="error-message">ผู้เล่นคนก่อนหน้านี้ชนะ</span>`
+                            });
+                        }
+                    });
+
+                    // Append the button to the container
+                 
+                document.getElementById('randomButtons').appendChild(button);
+
+            }
+
+            //ปิดการใช้งานปุ่มสร้างตัวเลย
+            function resetButtonState() {
+                // Reset the state of the random number button
+                const btnGenerate = document.getElementById('btnGenerate');
+                btnGenerate.disabled = false;
+                btnGenerate.style.backgroundColor = '#0084FF';
+            }
         });
-        function resetButtonState() {
-            // Reset the state of the random number button
-            const btnGenerate = document.getElementById('btnGenerate');
-            btnGenerate.disabled = false;
-            btnGenerate.style.backgroundColor = '#0084FF';
-        }
 
-        // Call the resetButtonState function when starting a new game
-        btnNewGame.addEventListener('click', () => {
-            // Clear all data in the gamecard
-            const gamecardRef = ref(db, 'gamecard');
-            set(gamecardRef, null);
-
-            // Reset the button state
-            resetButtonState();
-
-
-        });
 
 
     </script>
