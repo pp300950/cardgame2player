@@ -208,17 +208,20 @@
         <input type="password" id="password" placeholder="รหัสผ่าน"><br>
         <button id="loginBtn">เข้าสู่ระบบ</button>
         <h3>เกมไพ่</h3>
-            <h4> วิธีเล่น :
-            เมื่อเริ่มให้ผู้เล่นกดปุ่มสร้างตัวเลขซึ่งจะสร้างตัวเลขขึ้นมาให้7ตัวเป็นเลข1-4เเละให้ผลัดกันลง    โดยถ้าผู้เล่นคนใดลงไพ่ไปเเล้วทำให้เเต้มรวมเท่ากับ21เเต้ม  คนนั่นจะชนะทันที    เเต่หากผู้เล่นลงไปเเล้วทำให้เเต้มมันเกิน21ขึ้นไป   ถือว่าผู้เล่นที่เล่นก่อนหน้าผู้เล่นคนนั้นเป็นผู้ชนะ
+        <h4> วิธีเล่น :
+            เมื่อเริ่มให้ผู้เล่นกดปุ่มสร้างตัวเลขซึ่งจะสร้างตัวเลขขึ้นมาให้7ตัวเป็นเลข1-4เเละให้ผลัดกันลง
+            โดยถ้าผู้เล่นคนใดลงไพ่ไปเเล้วทำให้เเต้มรวมเท่ากับ21เเต้ม คนนั่นจะชนะทันที
+            เเต่หากผู้เล่นลงไปเเล้วทำให้เเต้มมันเกิน21ขึ้นไป ถือว่าผู้เล่นที่เล่นก่อนหน้าผู้เล่นคนนั้นเป็นผู้ชนะ
             เมื่อจบเกมให้กดปุ่มเริ่มเกมใหม่ห้องเเชทจะถูกรีเซ็ท</h4>
-            <h3>good luck!</h3>
-            <h2>คำเตือน</h2>
-            <h3>ออกเเบบมาสำหรับผู้เล่น2คนเเต่ถ้าจะเล่น3-4คนเกมจะเล่นจบเร็วมาก
-                ขณะเล่นไม่ควรพิมพ์ข้อความคุยกันเเบบที่มีตัวเลขเพราะระบบจะตรวจสอบข้อมูลที่เป็นตัวเลขจากข้อความในห้องเเชทนั้น  
-                เเละหากเข้าไปเเล้วเห็นคนอื่นเล่นอยู่ควรอยู่ดูเป็นผู้ชมที่ดีเเละเมื่อเค้าเล่นจบค่อยขอเล่นด้วย  มันมีห้องเดียวเเบ่งๆกันเล่น</h3>
-           
+        <h3>good luck!</h3>
+        <h2>คำเตือน</h2>
+        <h3>ออกเเบบมาสำหรับผู้เล่น2คนเเต่ถ้าจะเล่น3-4คนเกมจะเล่นจบเร็วมาก
+            ขณะเล่นไม่ควรพิมพ์ข้อความคุยกันเเบบที่มีตัวเลขเพราะระบบจะตรวจสอบข้อมูลที่เป็นตัวเลขจากข้อความในห้องเเชทนั้น
+            เเละหากเข้าไปเเล้วเห็นคนอื่นเล่นอยู่ควรอยู่ดูเป็นผู้ชมที่ดีเเละเมื่อเค้าเล่นจบค่อยขอเล่นด้วย
+            มันมีห้องเดียวเเบ่งๆกันเล่น</h3>
+
     </div>
-    
+
 
     <div class="card" id="card">
         <div class="user-detail">
@@ -281,11 +284,15 @@
 
                 chatContainer.style.display = 'block';
                 loginForm.style.display = 'none';
-                 // Update the username display
-        document.getElementById('showUsername').textContent = `${username} ผู้น่ารัก`;
+                // Update the username display
+                document.getElementById('showUsername').textContent = `${username} ผู้น่ารัก`;
 
 
                 // Listen for Enter key press in the message input field
+                 // Event listener for sending messages when button is clicked
+        btnSend.addEventListener('click', () => {
+            sendMessage();
+        });
                 txtMsg.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         sendMessage();
@@ -453,16 +460,17 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-
         function sendMessage(msg) {
-            const user = localStorage.getItem('username'); // Get the username from localStorage
-            if (msg.trim() !== '') {
-                set(push(ref(db, 'gamecard')), {
-                    username: user,
-                    msg: msg
-                });
-            }
-        }
+                    const user = localStorage.getItem('username'); // Get the username from localStorage
+                    if (msg.trim() !== '') {
+                        set(push(ref(db, 'gamecard')), {
+                            username: user,
+                            msg: msg
+                        });
+                        txtMsg.value = ''; // Clear message input field after sending
+                    }
+                }
+
 
         // Event listener for the new game button
         const btnNewGame = document.getElementById('btnNewGame');
@@ -495,6 +503,7 @@
 
 
         });
+
 
     </script>
 
