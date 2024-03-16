@@ -26,17 +26,11 @@
 
         .user {
             max-width: 40px;
-
             max-height: 40px;
-
             width: 100%;
-
             height: auto;
-
             object-fit: cover;
-
             border-radius: 50%;
-
         }
 
         .user-detail {
@@ -109,17 +103,14 @@
             color: #fff;
             border-radius: 25px;
             margin-left: 10px;
-
         }
 
         .system-message {
             color: #4bcc76;
-
         }
 
         .error-message {
             color: rgb(58, 190, 207);
-
         }
 
         /* CSS for number buttons */
@@ -146,9 +137,6 @@
             background-color: #e2bd29;
             color: #fff;
         }
-
-
-
 
         /* CSS สำหรับหน้าล็อกอิน */
         .login-form {
@@ -219,22 +207,18 @@
             ขณะเล่นไม่ควรพิมพ์ข้อความคุยกันเเบบที่มีตัวเลขเพราะระบบจะตรวจสอบข้อมูลที่เป็นตัวเลขจากข้อความในห้องเเชทนั้น
             เเละหากเข้าไปเเล้วเห็นคนอื่นเล่นอยู่ควรอยู่ดูเป็นผู้ชมที่ดีเเละเมื่อเค้าเล่นจบค่อยขอเล่นด้วย
             มันมีห้องเดียวเเบ่งๆกันเล่น</h3>
-
     </div>
-
-
     <div class="card" id="card">
         <div class="user-detail">
             <img class="user" src="https://digitalmore.co/wp-content/uploads/2023/04/50-Cute-anime-01.jpg" alt="">
             <h4 id="showUsername">คุณใครเนี่ย ?</h4>
-
         </div>
-       
         <div id="render" class="renderchat">
         </div>
         <div class="sendmsg">
             <!-- เพิ่มปุ่มสำหรับสร้างเลขสุ่ม -->
-            <!-- --> <button id="btnGenerate" class="btn-primary">สุ่มตัวเลข</button>
+            <button id="btnGenerate" class="btn-primary">สุ่มตัวเลข</button>
+
             <!-- เพิ่มตำแหน่งสำหรับปุ่มสุ่มเลข  -->
             <div id="randomButtons">
 
@@ -242,15 +226,11 @@
             <button id="btnSend" class="btn-primary">ส่ง</button>
             <input id="txtMsg" class="form-control" placeholder="Message..." type="text">
             <button id="btnNewGame" class="btn-primary">เริ่มเกมใหม่</button>
-
         </div>
     </div>
-
     <script type="module" defer>
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js";
         import { getDatabase, set, push, ref, onValue } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-database.js";
-
         const firebaseConfig = {
             apiKey: "AIzaSyDVzawA_NDnkqCHKerT2Gcg4zO9yohWx3U",
             authDomain: "pangpone-1372b.firebaseapp.com",
@@ -261,32 +241,21 @@
             appId: "1:911442011016:web:8434ea79964ceab63a903d",
             measurementId: "G-S144W2V9SG"
         };
-
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
         // Reference DOM elements
         const loginForm = document.getElementById('loginForm');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const loginButton = document.getElementById('loginBtn');
         const chatContainer = document.getElementById('card');
-        let cardvalue = 0;
-        let winningPoints = 0;
-        let i = 0;
-        let peple = 0;
-
-
         // Function to handle login
         function handleLogin() {
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
-
             if (username !== '' && password !== '') {
                 // Save the username to localStorage
                 localStorage.setItem('username', username);
-
                 chatContainer.style.display = 'block';
                 loginForm.style.display = 'none';
                 // Update the username display
@@ -298,12 +267,15 @@
                 btnSend.addEventListener('click', () => {
                     sendMessage();
                 });
+                // Event listener for sending messages when button is clicked
+                btnSend.addEventListener('click', () => {
+                    sendMessage();
+                });
                 txtMsg.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         sendMessage();
                     }
                 });
-
                 // Function to send message
                 function sendMessage() {
                     const user = localStorage.getItem('username'); // Get the username from localStorage
@@ -315,20 +287,15 @@
                         txtMsg.value = ''; // Clear message input field after sending
                     }
                 }
-
             } else {
                 alert('โปรดใส่รหัสผ่าน ');
             }
-
         }
-
         // Event listener for login button
         loginButton.addEventListener('click', handleLogin);
-
         // Listen for changes in Firebase database and update chat messages
         onValue(ref(db, 'gamecard'), (snapshot) => {
             const data = snapshot.val();
-
             let html = '';
             for (const key in data) {
                 if (Object.hasOwnProperty.call(data, key)) {
@@ -350,29 +317,20 @@
             }
             document.querySelector('#render').innerHTML = html;
         });
-
         // Event listener for sending messages when button is clicked
         btnSend.addEventListener('click', () => {
             sendMessage();
         });
-
         // Event listener for generating random numbers
         // Initialize total points outside the event listener
         let totalPoints = 0;
-
         // Define a callback function to handle totalPoints updates
-        function handleTotalPointsUpdate(updatedTotalPoints) {
-            // Do something with the updated totalPoints, such as displaying it or triggering another action
-            console.log(`Total Points Updated: ${updatedTotalPoints}`);
-        }
-
 
         btnGenerate.addEventListener('click', () => {
             // Check if the button has been disabled
             if (!btnGenerate.disabled) {
                 // Clear previous random buttons
                 document.getElementById('randomButtons').innerHTML = '';
-
                 // Generate 7 random buttons
                 for (let i = 0; i < 7; i++) {
                     // Create a button element
@@ -397,18 +355,15 @@
                             });
                         }
                     });
-
                     // Append the button to the container
                     document.getElementById('randomButtons').appendChild(button);
                 }
-
                 // Disable the button after generating random numbers
                 btnGenerate.disabled = true;
                 // Change button color to gray
                 btnGenerate.style.backgroundColor = '#cccccc';
             }
         });
-
         // Listen for changes in Firebase database and update chat messages
         onValue(ref(db, 'gamecard'), (snapshot) => {
             const data = snapshot.val();
@@ -416,13 +371,11 @@
             // Initialize total points counter
             let html = '';
             let winner = '';
-
             for (const key in data) {
                 if (Object.hasOwnProperty.call(data, key)) {
                     const message = data[key];
                     const sender = message.username || 'Anonymous';
                     const messageContent = message.msg || '';
-
                     // Parse the message content to extract numbers and sum them up
                     const numbers = messageContent.match(/\d+/g); // Extract numbers from the message
                     if (numbers) {
@@ -430,7 +383,6 @@
                             totalPoints += parseInt(number); // Sum up the numbers
                         });
                     }
-
                     if (sender !== usernameInput.value.trim()) {
                         html += `<div class="chat-incoming">
                         <img class="user" src="https://cdn.pixabay.com/photo/2021/11/24/05/19/user-6820232_640.png" alt="">
@@ -444,23 +396,16 @@
                     }
                 }
             }
-            if (i === 1) {
-                // Display the total points in the chat
-                html += `<div class="chat-incoming">
+            // Display the total points in the chat
+            html += `<div class="chat-incoming">
             <span>เเต้มรวม : ${totalPoints}</span>
          </div>`;
-            }
-
-
             document.querySelector('#render').innerHTML = html;
-
             // Call the callback function to handle totalPoints update
-            handleTotalPointsUpdate(totalPoints);
 
             // Scroll to the bottom of the chat after rendering new content
             scrollToBottom();
         });
-
         // Function to scroll to the bottom of the chat
         function scrollToBottom() {
             const chatContainer = document.getElementById('render');
@@ -479,19 +424,32 @@
         }
 
 
+
         // Event listener for the new game button
         const btnNewGame = document.getElementById('btnNewGame');
         btnNewGame.addEventListener('click', () => {
             // Clear all data in the gamecard
             const gamecardRef = ref(db, 'gamecard');
             set(gamecardRef, null);
-
             // Reset the state of the random number button
             btnGenerate.disabled = false;
             btnGenerate.style.backgroundColor = '#0084FF';
 
             document.getElementById('randomButtons').innerHTML = '';
 
+        });
+        function resetButtonState() {
+            // Reset the state of the random number button
+            const btnGenerate = document.getElementById('btnGenerate');
+            btnGenerate.disabled = false;
+            btnGenerate.style.backgroundColor = '#0084FF';
+        }
+
+        // Call the resetButtonState function when starting a new game
+        btnNewGame.addEventListener('click', () => {
+            // Clear all data in the gamecard
+            const gamecardRef = ref(db, 'gamecard');
+            set(gamecardRef, null);
             // Generate 7 random buttons
             for (let i = 0; i < 7; i++) {
                 // Create a button element
@@ -517,6 +475,8 @@
                     }
                 });
 
+                // Reset the button state
+                resetButtonState();
                 // Append the button to the container
 
                 document.getElementById('randomButtons').appendChild(button);
